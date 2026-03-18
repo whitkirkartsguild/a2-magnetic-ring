@@ -1,10 +1,10 @@
 /* [Counter Ring - Main Body] */
-// Main body outer diameter (15.5cm)
-counter_ring_outer_diameter = 155;
+// Main body outer diameter
+counter_ring_outer_diameter = 159;
 // Height of main cylinder
 counter_ring_body_height = 10;
-// Lower flange diameter (18cm)
-counter_ring_flange_outer_diameter = 180;
+// Lower flange diameter
+counter_ring_flange_outer_diameter = 185;
 // Lower flange thickness
 counter_ring_flange_height = 3;
 // Main body wall thickness
@@ -14,19 +14,19 @@ counter_ring_magnet_wall_width = 2;
 // Base depth under magnets
 counter_ring_magnet_base_depth = 2;
 // Height of top magnet ring
-counter_ring_height = 3;
+counter_ring_height = 1.5;
 
 /* [Counter Ring - Screws] */
-// Number of screw holes (for 8mm wood screws)
+// Number of screw holes
 counter_ring_screw_count = 4;
 // Clearance for screw shaft
 counter_ring_screw_hole_diameter = 4;
 // Diameter for screw head
-counter_ring_countersink_diameter = 8;
+counter_ring_countersink_diameter = 7;
 // Depth of countersink
 counter_ring_countersink_depth = 2;
 // Positioning radius for screws
-counter_ring_screw_circle_diameter = 168;
+counter_ring_screw_circle_diameter = 174;
 
 /* [Plant 1 - Magnet Ring] */
 // Outer diameter
@@ -40,29 +40,29 @@ plant_1_magnet_base_depth = 1;
 // Inner hole diameter (shared by counter ring and plant rings)
 common_inner_hole_diameter = 138;
 // Edge chamfer radius for safety
-edge_chamfer_radius = 0.5;
+edge_chamfer_radius = 0.8;
 
 /* [Text Settings] */
 // Text label 1 (shared)
 text_1 = "WAG";
 // Text label 2 (shared)
-text_2 = "A2 MAG RING";
+text_2 = "LSOH";
 // Text label 3 for counter
 text_3_counter = "COUNTER";
 // Text label 3 for plant
-text_3_plant = "PLANT 1";
+text_3_plant = "A2-1";
 // Text label 4 (version - shared)
-text_4 = "v1";
+text_4 = "v2";
 // Font size for counter ring text
 counter_text_size = 4;
 // Font size for plant ring text
-plant_text_size = 4;
+plant_text_size = 3;
 // Emboss depth for all text (shared)
 emboss_depth = 0.8;
 
 /* [Magnets - Shared] */
 // Number of magnets
-magnet_count = 8;
+magnet_count = 16;
 // Physical magnet diameter
 magnet_diameter = 6;
 // Physical magnet depth
