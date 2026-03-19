@@ -1,32 +1,36 @@
 /* [Counter Ring - Main Body] */
-// Main body outer diameter (15.5cm)
-counter_ring_outer_diameter = 155;
+// Main body outer diameter
+counter_ring_outer_diameter = 159;
 // Height of main cylinder
 counter_ring_body_height = 10;
-// Lower flange diameter (18cm)
-counter_ring_flange_outer_diameter = 180;
+// Recess for alignment hole
+counter_alignment_recess = 3;
+// Tolerance for alignment hole
+counter_alignment_tolerance = 1;
+// Lower flange diameter
+counter_ring_flange_outer_diameter = 185;
 // Lower flange thickness
-counter_ring_flange_height = 3;
+counter_ring_flange_height = 2;
 // Main body wall thickness
 counter_ring_wall_thickness = 2;
 // Radial wall around magnets
-counter_ring_magnet_wall_width = 2;
+counter_ring_magnet_wall_width = 1.5;
 // Base depth under magnets
-counter_ring_magnet_base_depth = 2;
+counter_ring_magnet_base_depth = 1.5;
 // Height of top magnet ring
-counter_ring_height = 3;
+counter_ring_height = 1.5;
 
 /* [Counter Ring - Screws] */
-// Number of screw holes (for 8mm wood screws)
+// Number of screw holes
 counter_ring_screw_count = 4;
 // Clearance for screw shaft
 counter_ring_screw_hole_diameter = 4;
 // Diameter for screw head
-counter_ring_countersink_diameter = 8;
+counter_ring_countersink_diameter = 7;
 // Depth of countersink
 counter_ring_countersink_depth = 2;
 // Positioning radius for screws
-counter_ring_screw_circle_diameter = 168;
+counter_ring_screw_circle_diameter = 174;
 
 /* [Plant 1 - Magnet Ring] */
 // Outer diameter
@@ -38,31 +42,31 @@ plant_1_magnet_base_depth = 1;
 
 /* [Common - Shared Dimensions] */
 // Inner hole diameter (shared by counter ring and plant rings)
-common_inner_hole_diameter = 138;
+common_inner_hole_diameter = 142;
 // Edge chamfer radius for safety
-edge_chamfer_radius = 0.5;
+edge_chamfer_radius = 0.6;
 
 /* [Text Settings] */
 // Text label 1 (shared)
 text_1 = "WAG";
 // Text label 2 (shared)
-text_2 = "A2 MAG RING";
+text_2 = "LSOH";
 // Text label 3 for counter
 text_3_counter = "COUNTER";
 // Text label 3 for plant
-text_3_plant = "PLANT 1";
+text_3_plant = "A2-1";
 // Text label 4 (version - shared)
-text_4 = "v1";
+text_4 = "v2";
 // Font size for counter ring text
 counter_text_size = 4;
 // Font size for plant ring text
-plant_text_size = 4;
+plant_text_size = 3;
 // Emboss depth for all text (shared)
 emboss_depth = 0.8;
 
 /* [Magnets - Shared] */
 // Number of magnets
-magnet_count = 8;
+magnet_count = 16;
 // Physical magnet diameter
 magnet_diameter = 6;
 // Physical magnet depth
@@ -97,7 +101,8 @@ max_wall_cylinder_diameter = max(plant_1_wall_cylinder_diameter_calc, counter_ri
 // Position magnets so outer edge of magnet walls doesn't exceed the smaller ring
 magnet_circle_radius = min_outer_diameter/2 - max_wall_cylinder_diameter/2;
 counter_ring_body_inner_diameter = counter_ring_outer_diameter - (2 * counter_ring_wall_thickness);
-counter_ring_total_height = counter_ring_body_height + counter_ring_flange_height;
+// Adjusted body height with alignment recess dropped
+counter_ring_body_height_adjusted = counter_ring_body_height - counter_alignment_recess;
 // Calculate chamfer support dimensions (45° angle from inner hole to inner wall)
 chamfer_radial_distance = (counter_ring_body_inner_diameter - common_inner_hole_diameter) / 2;
 chamfer_height = chamfer_radial_distance; // 45° = equal height and radial distance
@@ -256,12 +261,12 @@ module counter_ring_assembly() {
                     
                     // Main body cylinder
                     translate([0, 0, counter_ring_flange_height])
-                        cylinder(h=counter_ring_body_height, d=counter_ring_outer_diameter, $fn=fn_main);
+                        cylinder(h=counter_ring_body_height_adjusted, d=counter_ring_outer_diameter, $fn=fn_main);
                 }
                 
                 // Subtract inner cylinder to leave wall thickness
                 translate([0, 0, -overlap])
-                    cylinder(h=counter_ring_body_height + counter_ring_flange_height + 2*overlap, d=counter_ring_body_inner_diameter, $fn=fn_main);
+                    cylinder(h=counter_ring_body_height_adjusted + counter_ring_flange_height + 2*overlap, d=counter_ring_body_inner_diameter, $fn=fn_main);
                 
                 // Subtract chamfer at bottom inner edge for safety
                 translate([0, 0, -overlap])
@@ -297,12 +302,16 @@ module counter_ring_assembly() {
                 counter_text_embossed();
             }
             
+            // Alignment recess cylinder on top of main body with chamfered upper inner lip
+            translate([0, 0, counter_ring_flange_height + counter_ring_body_height_adjusted])
+                chamfered_ring(counter_ring_outer_diameter, plant_1_outer_diameter + counter_alignment_tolerance, counter_alignment_recess, true, false, false);
+            
             // Counter magnet ring on top of main body
-            translate([0, 0, counter_ring_flange_height + counter_ring_body_height - counter_ring_height])
+            translate([0, 0, counter_ring_flange_height + counter_ring_body_height_adjusted - counter_ring_height])
                 magnet_ring_counter();
             
             // Chamfered support structure (added as separate element)
-            translate([0, 0, counter_ring_flange_height + counter_ring_body_height - counter_ring_height - chamfer_height])
+            translate([0, 0, counter_ring_flange_height + counter_ring_body_height_adjusted - counter_ring_height - chamfer_height])
             difference() {
                 // Solid cylinder at inner wall diameter
                 cylinder(h=chamfer_height, d=counter_ring_body_inner_diameter, $fn=fn_main);
@@ -317,7 +326,7 @@ module counter_ring_assembly() {
         }
         
         // Subtract magnet cutouts from entire assembly (cuts through support if needed)
-        translate([0, 0, counter_ring_flange_height + counter_ring_body_height - magnet_cutout_depth])
+        translate([0, 0, counter_ring_flange_height + counter_ring_body_height_adjusted - magnet_cutout_depth])
             magnet_cutouts_ring(0);
     }
 }
